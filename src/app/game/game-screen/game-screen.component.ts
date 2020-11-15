@@ -24,6 +24,7 @@ export class GameScreenComponent implements OnInit {
   username: string;
   questionNumberCounter = 1;
   currentQuestion$: Question;
+  possibleAnswers: string[];
   answerChosen = '';
   answerSubmitted = false;
   disableSkipButton = false;
@@ -59,8 +60,16 @@ export class GameScreenComponent implements OnInit {
   }
 
   getCurrentQuestionData(): void {
-    this.gameService.getQuestionByIndex(this.questionNumberCounter - 1).pipe(first()).subscribe(
-      question => this.currentQuestion$ = question);
+    this.gameService.getQuestionByIndex(this.questionNumberCounter - 1).pipe(first()).subscribe(question => {
+      this.currentQuestion$ = question;
+      this.possibleAnswers = this.randomizeAnswersOrder();
+    });
+  }
+
+  private randomizeAnswersOrder(): string[] {
+    const randomizedAnswersOrder = [...this.currentQuestion$.incorrectAnswers, this.currentQuestion$.correctAnswer];
+    randomizedAnswersOrder.sort(() => Math.random() - 0.5);
+    return randomizedAnswersOrder;
   }
 
   onAnswerSubmitted(): void {
