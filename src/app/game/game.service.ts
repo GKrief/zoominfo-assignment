@@ -32,10 +32,6 @@ export class GameService {
     return new Question(questionData[QUESTION_HEADER], questionData[CORRECT_HEADER], questionData[INCORRECT_HEADER]);
   }
 
-  public getGameData(): Observable<GameData> {
-    return this.store.select('gameData');
-  }
-
   public setStartGameData(game: GameData): void {
     this.store.dispatch(new LoadInitialData(game));
   }
