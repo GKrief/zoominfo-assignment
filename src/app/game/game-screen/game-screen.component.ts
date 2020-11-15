@@ -5,7 +5,7 @@ import { first } from 'rxjs/operators';
 import {GameData} from '../../core/models/game-data';
 import {ActivatedRoute} from '@angular/router';
 import {OptionCardComponent} from '../option-card/option-card.component';
-import {combineLatest, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {NUM_OF_QUESTIONS} from '../../core/constants/global';
 import {LeaderboardService} from '../../leaderboard/leaderboard.service';
 import {LeaderboardRecord} from '../../core/models/leaderboard-record';
@@ -41,7 +41,7 @@ export class GameScreenComponent implements OnInit {
     this.gameService.getQuestions().pipe(first()).subscribe(data => {
       this.gameService.setStartGameData(new GameData(this.username, data));
       this.getCurrentQuestionData();
-    }, error => window.alert('Something went wrong! Check your internet connection'));
+    }, () => window.alert('Something went wrong! Check your internet connection'));
     this.startTimer();
   }
 
