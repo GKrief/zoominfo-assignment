@@ -78,7 +78,7 @@ export class GameScreenComponent implements OnInit {
     this.isCorrectAnswer() ? this.gameService.increaseScore() : this.handleDecrementLife();
     this.gameService.setAnswerToQuestion(this.questionNumberCounter - 1, this.isCorrectAnswer());
     this.options.forEach(option => {
-      this.answerChosen === option.cardText ? option.submittedCard = true : option.submittedCard = false;
+      option.submittedCard = this.answerChosen === option.cardText;
       option.isCardDisabled = true;
     });
   }
@@ -98,7 +98,7 @@ export class GameScreenComponent implements OnInit {
 
   getChosenAnswer($event: string): void {
     this.answerChosen = $event;
-    this.options.forEach(option => !(this.answerChosen === option.cardText) ? option.selectedCard = false : option.selectedCard = true);
+    this.options.forEach(option => option.selectedCard = this.answerChosen === option.cardText);
   }
 
   onSkip(): void {
