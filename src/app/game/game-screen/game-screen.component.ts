@@ -20,7 +20,8 @@ export class GameScreenComponent implements OnInit {
 
   @ViewChildren(OptionCardComponent) options: QueryList<OptionCardComponent>;
   timeLeft: number;
-  interval;
+  interval: any;
+  username: string;
   questionNumberCounter = 1;
   currentQuestion$: Question;
   answerChosen = '';
@@ -34,8 +35,10 @@ export class GameScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.username = this.activatedRoute.snapshot.paramMap.get('username');
+
     this.gameService.getQuestions().pipe(first()).subscribe(data => {
-      this.gameService.setStartGameData(new GameData(this.activatedRoute.snapshot.paramMap.get('username'), data));
+      this.gameService.setStartGameData(new GameData(this.username, data));
       this.getCurrentQuestionData();
     }, error => window.alert('Something went wrong! Check your internet connection'));
     this.startTimer();
@@ -53,10 +56,6 @@ export class GameScreenComponent implements OnInit {
     this.handleDecrementLife();
     this.disableSkipButton = true;
     this.options.forEach(option => option.isCardDisabled = true);
-  }
-
-  private stopTimer(): void {
-    clearInterval(this.interval);
   }
 
   getCurrentQuestionData(): void {
@@ -132,10 +131,14 @@ export class GameScreenComponent implements OnInit {
     this.startTimer();
   }
 
+  private stopTimer(): void {
+    clearInterval(this.interval);
+  }
+
   private onEndOfGame(): void {
     this.endOfGame = true;
-    combineLatest([this.getUsername(), this.getPoints()]).pipe(first()).subscribe(results => {
-      this.leaderboardService.addRecord(new LeaderboardRecord(results[0], results[1], new Date().toDateString()));
+    this.getPoints().pipe(first()).subscribe(points => {
+      this.leaderboardService.addRecord(new LeaderboardRecord(this.username, points, new Date().toDateString()));
     });
   }
 
@@ -145,10 +148,6 @@ export class GameScreenComponent implements OnInit {
 
   getNumberOfLivesRemaining(): Observable<number> {
     return this.gameService.getNumberOfLivesRemaining();
-  }
-
-  getUsername(): Observable<string> {
-    return this.gameService.getUsername();
   }
 
   getPoints(): Observable<number> {
