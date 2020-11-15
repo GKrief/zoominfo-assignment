@@ -32,10 +32,6 @@ export class GameService {
     return new Question(questionData[QUESTION_HEADER], questionData[CORRECT_HEADER], questionData[INCORRECT_HEADER]);
   }
 
-  public setStartGameData(game: GameData): void {
-    this.store.dispatch(new LoadInitialData(game));
-  }
-
   public getUsername(): Observable<string> {
     return this.store.select(fromGameData.getUsername);
   }
@@ -54,6 +50,10 @@ export class GameService {
 
   public getQuestionByIndex(index: number): Observable<Question> {
     return this.store.select(fromGameData.getQuestion, {index});
+  }
+
+  public setStartGameData(game: GameData): void {
+    this.store.dispatch(new LoadInitialData(game));
   }
 
   public decrementSkip(): void {
