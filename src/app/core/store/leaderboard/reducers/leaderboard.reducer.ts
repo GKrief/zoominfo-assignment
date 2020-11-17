@@ -1,5 +1,6 @@
 import {Leaderboard} from '../../../models/leaderboard';
 import * as LeaderboardActions from '../actions/leaderboard.actions';
+import {ADD_RECORD} from '../actions/leaderboard.actions';
 
 const initialState: Leaderboard = {
   leaderboardRecords: []
@@ -7,7 +8,7 @@ const initialState: Leaderboard = {
 
 export function reducer(state: Leaderboard = initialState, action: LeaderboardActions.Actions): Leaderboard {
   switch (action.type) {
-    case '[GameData] Add Record':
+    case ADD_RECORD:
       return {...state, leaderboardRecords: [...state.leaderboardRecords, action.record]};
 
     default:

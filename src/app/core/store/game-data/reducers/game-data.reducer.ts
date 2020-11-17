@@ -2,6 +2,7 @@ import * as GameDataActions from '../actions/game-data.actions';
 import {GameData} from '../../../models/game-data';
 import {GameStatus} from '../../../models/game-status';
 import {POINTS_EARNED_PER_QUESTION} from '../../../constants/global';
+import {ADD_POINTS, DECREMENT_LIFE, DECREMENT_SKIP, SET_ANSWER} from '../actions/game-data.actions';
 
 const initialState: GameData = {
   username: '',
@@ -16,19 +17,19 @@ export function reducer(state: GameData = initialState, action: GameDataActions.
     case GameDataActions.LOAD_INITIAL_DATA:
       return action.payload;
 
-    case '[GameData] Decrement Skip':
+    case DECREMENT_SKIP:
       updatedGameStatus.skips--;
       return {...state, gameStatus: updatedGameStatus};
 
-    case '[GameData] Decrement Life':
+    case DECREMENT_LIFE:
       updatedGameStatus.livesRemaining--;
       return {...state, gameStatus: updatedGameStatus};
 
-    case '[GameData] Add Points':
+    case ADD_POINTS:
       updatedGameStatus.points += POINTS_EARNED_PER_QUESTION;
       return {...state, gameStatus: updatedGameStatus};
 
-    case '[GameData] set correctness for question':
+    case SET_ANSWER:
       const updatedQuestion = state.gameQuestions[action.questionIndex];
       return {
         ...state,
